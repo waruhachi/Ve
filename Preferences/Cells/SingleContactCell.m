@@ -100,16 +100,7 @@
     NSURLSessionDataTask* task = [[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:^(NSData* _Nullable data, NSURLResponse* _Nullable response, NSError* _Nullable error) {
         @try {
             NSDictionary* json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            NSURL *avatarUrl;
-            NSString *avatarString = ([json isKindOfClass:[NSDictionary class]])
-                ? [json[@"avatar_url"] isKindOfClass:[NSString class]] ? json[@"avatar_url"] : @""
-                : @"";
-
-            avatarString = (avatarString.length > 0)
-                ? avatarString
-                : @"https://avatars.githubusercontent.com/u/83172201";
-
-            avatarUrl = [NSURL URLWithString:avatarString] ?: [NSURL URLWithString:@"https://avatars.githubusercontent.com/u/83172201"];
+            NSURL* avatarUrl = [NSURL URLWithString:json[@"avatar_url"]];
             completion(avatarUrl);
         } @catch (NSException* exception) {
             completion(nil);
@@ -124,17 +115,17 @@
  */
 - (void)fetchAvatarWithCompletion:(void (^)(UIImage* avatar))completion {
     [self fetchAvatarUrlWithCompletion:^(NSURL* avatarUrl) {
-        if (avatarUrl) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                NSData* imageData = [NSData dataWithContentsOfURL:avatarUrl];
-                UIImage* avatar = [UIImage imageWithData:imageData];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    completion(avatar);
-                });
-            });
-        } else {
-            completion(nil);
+        if (!avatarUrl) {
+            avatarUrl = [NSURL URLWithString:@"https://avatars.githubusercontent.com/u/83172201"];
         }
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSData* imageData = [NSData dataWithContentsOfURL:avatarUrl];
+            UIImage* avatar = [UIImage imageWithData:imageData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completion(avatar);
+            });
+        });
     }];
 }
 
