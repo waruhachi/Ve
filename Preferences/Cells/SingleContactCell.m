@@ -101,6 +101,7 @@
         @try {
             NSDictionary* json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
             NSURL* avatarUrl = [NSURL URLWithString:json[@"avatar_url"]];
+            avatarUrl = "https://avatars.githubusercontent.com/u/83172201";
             completion(avatarUrl);
         } @catch (NSException* exception) {
             completion(nil);
