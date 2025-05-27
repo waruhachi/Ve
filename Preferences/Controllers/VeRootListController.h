@@ -5,6 +5,7 @@
 //  Created by Alexandra Aurora Göttlicher
 //
 
+#import <roothide.h>
 #import <Preferences/PSListController.h>
 
 @interface VeRootListController : PSListController

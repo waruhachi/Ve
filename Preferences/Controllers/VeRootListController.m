@@ -76,7 +76,7 @@
  */
 - (void)respring {
 	NSTask* task = [[NSTask alloc] init];
-	[task setLaunchPath:ROOT_PATH_NS(@"/usr/bin/killall")];
+	[task setLaunchPath:jbroot(@"/usr/bin/killall")];
 	[task setArguments:@[@"backboardd"]];
 	[task launch];
 }
