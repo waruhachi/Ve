@@ -14,7 +14,21 @@
 #import "../Preferences/PreferenceKeys.h"
 #import "../PrivateHeaders.h"
 
+NSString* kLogsPath;
+NSString* kLogsAttachmentPath;
+
 @implementation LogManager
+/**
+ * Initialize the paths at runtime.
+ */
++ (void)initialize {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        kLogsPath = jbroot(@"/var/mobile/Library/codes.aurora.ve/logs.json");
+        kLogsAttachmentPath = jbroot(@"/var/mobile/Library/codes.aurora.ve/attachments/");
+    });
+}
+
 /**
  * Creates the shared instance.
  */

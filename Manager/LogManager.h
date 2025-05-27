@@ -11,8 +11,8 @@
 @class Log;
 @class BBBulletin;
 
-static NSString* kLogsPath = jbroot(@"/var/mobile/Library/codes.aurora.ve/logs.json");
-static NSString* kLogsAttachmentPath = jbroot(@"/var/mobile/Library/codes.aurora.ve/attachments/");
+extern NSString* kLogsPath;
+extern NSString* kLogsAttachmentPath;
 
 @interface LogManager : NSObject {
     NSFileManager* _fileManager;
