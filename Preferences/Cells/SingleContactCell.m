@@ -100,10 +100,16 @@
     NSURLSessionDataTask* task = [[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:^(NSData* _Nullable data, NSURLResponse* _Nullable response, NSError* _Nullable error) {
         @try {
             NSDictionary* json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            NSURL* avatarUrl = [NSURL URLWithString:json[@"avatar_url"]];
-            if (!avatarUrl) {
-                avatarUrl = [NSURL URLWithString:@"https://avatars.githubusercontent.com/u/83172201"];
-            }
+            NSURL *avatarUrl;
+            NSString *avatarString = ([json isKindOfClass:[NSDictionary class]])
+                ? [json[@"avatar_url"] isKindOfClass:[NSString class]] ? json[@"avatar_url"] : @""
+                : @"";
+
+            avatarString = (avatarString.length > 0)
+                ? avatarString
+                : @"https://avatars.githubusercontent.com/u/83172201";
+
+            avatarUrl = [NSURL URLWithString:avatarString] ?: [NSURL URLWithString:@"https://avatars.githubusercontent.com/u/83172201"];
             completion(avatarUrl);
         } @catch (NSException* exception) {
             completion(nil);
